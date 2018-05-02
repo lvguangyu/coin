@@ -28,14 +28,14 @@ function run() {
             LogFile.info('购买'+symbol+'：'+buyPrice+'，购买数量：'+buyPrice+'.购买状态：'+JSON.stringify(buyResult));
             // let buyResult = { status: 'ok', data: '3781495303' };
             if(buyResult.status === 'ok' ){
-                let flag = checkOrderState(buyResult.data);
+                let flag = checkOrderState('购买', buyResult.data);
                 if(flag){
                     let userBlance = getUserBalance();
                     eosCount = getEosCount(userBlance);
                     LogFile.info('购买'+symbol+'：'+buyPrice+'，购买数量：'+buyPrice+'.购买状态：'+JSON.stringify(buyResult));
                     let sellResult = sellCoin(symbol, eosCount, sellPrice);
                     // let sellResult = { status: 'ok', data: '3783364214' };
-                    let flag1 = checkOrderState(sellResult.data);
+                    let flag1 = checkOrderState('出售', sellResult.data);
                     if(flag1){
                         run();
                     }
@@ -89,17 +89,17 @@ function getUserBalance(){
     LogFile.info('获取用户状态：成功。当前拥有USDT---' + usdtCount);
     return userBlance;
 }
-function checkOrderState (id) {
+function checkOrderState (msg, id) {
     let flag = true;
     while (flag) {
         let res = hbsdk.get_order(id);
 
         if(res.state === 'filled') {
-            LogFile.info('购买状态：成功。'+JSON.stringify(res));
+            LogFile.info(msg + '状态：成功。'+JSON.stringify(res));
             flag = false;
             return true;
         }else{
-            LogFile.info('购买状态：未成功。'+JSON.stringify(res));
+            LogFile.info(msg + '状态：未成功。'+JSON.stringify(res));
         }
         pausecomp(500);
     }
