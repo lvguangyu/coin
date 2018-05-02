@@ -16,37 +16,37 @@ log4js.configure({
 let LogFile = log4js.getLogger('log_file');
 // 按注释的步骤逐步放开注释，运行程序，验证接口
 function run() {
-    LogFile.info('123');
-    // let resTrade = hbsdk.get_trade(symbol);
-    // if(resTrade.status === 'ok'){
-    //     if(resTrade && resTrade.tick && resTrade.tick.data && resTrade.tick.data[0] && resTrade.tick.data[0].price){
-    //         price = resTrade.tick.data[0].price;
-    //         buyPrice = new Decimal(price).sub(new Decimal(price).mul(new Decimal(coefficient))).toNumber().toFixed(4);
-    //         sellPrice = new Decimal(price).sub(new Decimal(price).add(new Decimal(coefficient))).toNumber().toFixed(4);
-    //         LogFile.info('当前价格：'+price+'USDT，购买价格：'+buyPrice+'USDT,卖出价格：'+sellPrice+'USDT.');
-    //         let buyResult = buyCoin(symbol,amount, buyPrice);
-    //         LogFile.info('购买'+symbol+'：'+buyPrice+'，购买数量：'+buyPrice+'.购买状态：'+JSON.stringify(buyResult));
-    //         // let buyResult = { status: 'ok', data: '3781495303' };
-    //         if(buyResult.status === 'ok' ){
-    //             let flag = checkOrderState('购买', buyResult.data);
-    //             if(flag){
-    //                 let userBlance = getUserBalance();
-    //                 eosCount = getEosCount(userBlance);
-    //                 LogFile.info('购买'+symbol+'：'+buyPrice+'，购买数量：'+buyPrice+'.购买状态：'+JSON.stringify(buyResult));
-    //                 let sellResult = sellCoin(symbol, eosCount, sellPrice);
-    //                 // let sellResult = { status: 'ok', data: '3783364214' };
-    //                 let flag1 = checkOrderState('出售', sellResult.data);
-    //                 if(flag1){
-    //                     run();
-    //                 }
-    //             }
-    //         }else{
-    //             run();
-    //         }
-    //     }else{
-    //         run();
-    //     }
-    // }
+    // LogFile.info('123');
+    let resTrade = hbsdk.get_trade(symbol);
+    if(resTrade.status === 'ok'){
+        if(resTrade && resTrade.tick && resTrade.tick.data && resTrade.tick.data[0] && resTrade.tick.data[0].price){
+            price = resTrade.tick.data[0].price;
+            buyPrice = new Decimal(price).sub(new Decimal(price).mul(new Decimal(coefficient))).toNumber().toFixed(4);
+            sellPrice = new Decimal(price).sub(new Decimal(price).add(new Decimal(coefficient))).toNumber().toFixed(4);
+            LogFile.info('当前价格：'+price+'USDT，购买价格：'+buyPrice+'USDT,卖出价格：'+sellPrice+'USDT.');
+            let buyResult = buyCoin(symbol,amount, buyPrice);
+            LogFile.info('购买'+symbol+'：'+buyPrice+'，购买数量：'+buyPrice+'.购买状态：'+JSON.stringify(buyResult));
+            // let buyResult = { status: 'ok', data: '3781495303' };
+            if(buyResult.status === 'ok' ){
+                let flag = checkOrderState('购买', buyResult.data);
+                if(flag){
+                    let userBlance = getUserBalance();
+                    eosCount = getEosCount(userBlance);
+                    LogFile.info('购买'+symbol+'：'+buyPrice+'，购买数量：'+buyPrice+'.购买状态：'+JSON.stringify(buyResult));
+                    let sellResult = sellCoin(symbol, eosCount, sellPrice);
+                    // let sellResult = { status: 'ok', data: '3783364214' };
+                    let flag1 = checkOrderState('出售', sellResult.data);
+                    if(flag1){
+                        run();
+                    }
+                }
+            }else{
+                run();
+            }
+        }else{
+            run();
+        }
+    }
 
 }
 function sellCoin(symbol, eosCount, sellPrice){
