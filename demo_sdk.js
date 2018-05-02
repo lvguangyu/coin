@@ -17,6 +17,7 @@ let LogFile = log4js.getLogger('log_file');
 // 按注释的步骤逐步放开注释，运行程序，验证接口
 function run() {
     // LogFile.info('123');
+    // checkOrderState('test', '3965508827');
     let resTrade = hbsdk.get_trade(symbol);
     if(resTrade.status === 'ok'){
         if(resTrade && resTrade.tick && resTrade.tick.data && resTrade.tick.data[0] && resTrade.tick.data[0].price){
@@ -93,8 +94,7 @@ function checkOrderState (msg, id) {
     let flag = true;
     while (flag) {
         let res = hbsdk.get_order(id);
-
-        if(res.state === 'filled') {
+        if(res.data.state === 'filled') {
             LogFile.info(msg + '状态：成功。'+JSON.stringify(res));
             flag = false;
             return true;
